@@ -7,16 +7,15 @@ const config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  darkMode: "class",
+  darkMode: "class", // ใช้ <html class="dark"> เพื่อสลับธีม
   theme: {
     extend: {
       colors: {
-        primary: "#3b82f6",
-        secondary: "#ef4444",
-        background: "#ffffff",
-        foreground: "#171717",
-        darkBg: "#0a0a0a",
-        darkText: "#ededed",
+        primary: "#f07c00", // สีส้มหลัก
+        background: "#ffffff", // พื้นหลังโหมดสว่าง
+        foreground: "#000000", // ตัวอักษรโหมดสว่าง
+        darkBg: "#000000", // พื้นหลังโหมดมืด
+        darkText: "#ffffff", // ตัวอักษรโหมดมืด
       },
       fontFamily: {
         sans: ['"Inter"', "sans-serif"],
