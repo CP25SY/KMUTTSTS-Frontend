@@ -79,11 +79,36 @@
 
 @layer base {
   body {
-    background: var(--background);
+    background: var(--background-alt);
     color: var(--foreground);
   }
+}
 
-  /* Button styles */
+@layer components {
+  .bg-theme {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+  .bg-theme-alt {
+    background-color: var(--background-alt);
+    color: var(--foreground);
+  }
+  .text-theme {
+    color: var(--foreground);
+  }
+  .text-theme-muted {
+    color: var(--foreground-muted);
+  }
+  .border-border {
+    border-color: var(--border);
+  }
+  .bg-muted {
+    background-color: var(--muted);
+    color: var(--muted-text);
+  }
+  .bg-muted-hover:hover {
+    background-color: var(--muted-hover);
+  }
   .btn-primary {
     background-color: var(--primary);
     color: var(--primary-text);
