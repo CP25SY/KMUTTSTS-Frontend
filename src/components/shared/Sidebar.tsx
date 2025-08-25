@@ -107,7 +107,7 @@ export default function Sidebar({
                 href={it.href}
                 aria-current={it.active ? "page" : undefined}
                 className={[ 
-                  "grid h-11 w-11 place-items-center rounded-xl transition-colors outline-none",
+                  "grid h-11 w-11 place-items-center bg-pri rounded-xl transition-colors outline-none",
                   it.active
                     ? "bg-foreground text-background hover:bg-foreground/90"
                     : "bg-background hover:bg-muted",
@@ -125,7 +125,7 @@ export default function Sidebar({
         {/* Help Button */}
         <button
           aria-label="Help"
-          className="mb-2 grid h-11 w-11 place-items-center rounded-xl bg-background dark:bg-background-dark text-[var(--muted-text)] shadow transition-colors hover:bg-muted outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]"
+          className="mb-2 grid h-11 w-11 place-items-center rounded-xl bg-background shadow transition-colors hover:bg-muted outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]"
           title="Help">
           <Help />
         </button>
