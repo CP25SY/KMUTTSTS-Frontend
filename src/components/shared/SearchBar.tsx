@@ -51,10 +51,10 @@ export default function SearchBar({ config }: SearchBarProps) {
         {/* Right Side Icons */}
         <div className="flex items-center gap-4 ml-4">
           {showThemeToggle && (
-            <div className="rounded-full w-16 h-9 flex items-center justify-center bg-theme"></div>
+            <div className="rounded-full w-16 h-9 flex items-center justify-center bg-background"></div>
           )}
           {showProfile && (
-            <div className="rounded-full bg-theme dark:bg-gray-700 w-12 h-12 flex items-center justify-center text-gray-500 text-xs">
+            <div className="rounded-full bg-background w-12 h-12 flex items-center justify-center text-gray-500 text-xs">
               50 x 50
             </div>
           )}

@@ -92,7 +92,7 @@ export default function Sidebar({
         {/* Brand Button */}
         <button
           aria-label="Brand"
-          className="mt-1 grid h-11 w-11 place-items-center rounded-full shadow outline-none bg-background-alt ring-0 focus-visible:ring-2 focus-visible:ring-[var(--border)]">
+          className="mt-1 grid h-11 w-11 place-items-center rounded-full shadow outline-none bg-muted ring-0 focus-visible:ring-2 focus-visible:ring-[var(--border)]">
           <span
             className="h-5 w-5 rounded-sm"
             style={{ background: "var(--primary)" }}

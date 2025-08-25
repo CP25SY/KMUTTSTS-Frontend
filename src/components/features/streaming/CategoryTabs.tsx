@@ -46,7 +46,7 @@ export default function CategoryTabs() {
               className={cn(
                 "rounded-full px-4 py-2 text-sm font-medium transition-colors",
                 activeCategory === category.id
-                  ? "bg-yellow-400 text-black hover:bg-yellow-500"
+                  ? "bg-primary text-background hover:bg-primary/85"
                   : "bg-muted text-muted-foreground hover:bg-muted/80"
               )}
               onClick={() => setActiveCategory(category.id)}
