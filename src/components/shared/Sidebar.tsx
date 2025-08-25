@@ -86,13 +86,13 @@ export default function Sidebar({
     <aside
       role="navigation"
       aria-label="Primary"
-      className={`${positionClass} left-0 h-[calc(100vh-2rem)] w-[72px] shrink-0 m-4 rounded-2xl bg-theme shadow-lg`}
+      className={`${positionClass} left-0 h-[calc(100vh-2rem)] w-[72px] shrink-0 m-4 rounded-2xl bg-background shadow-lg`}
       style={position === "fixed" ? { left: leftOffset } : undefined}>
       <div className="flex h-full flex-col items-center gap-3 py-3">
         {/* Brand Button */}
         <button
           aria-label="Brand"
-          className="mt-1 grid h-11 w-11 place-items-center rounded-full shadow outline-none bg-theme-alt ring-0 focus-visible:ring-2 focus-visible:ring-[var(--border)]">
+          className="mt-1 grid h-11 w-11 place-items-center rounded-full shadow outline-none bg-background-alt ring-0 focus-visible:ring-2 focus-visible:ring-[var(--border)]">
           <span
             className="h-5 w-5 rounded-sm"
             style={{ background: "var(--primary)" }}
@@ -109,8 +109,8 @@ export default function Sidebar({
                 className={[ 
                   "grid h-11 w-11 place-items-center rounded-xl transition-colors outline-none",
                   it.active
-                    ? "bg-foreground dark:bg-foreground-dark text-background dark:text-background-dark"
-                    : "bg-background dark:bg-background-dark text-[var(--muted-text)] bg-muted-hover",
+                    ? "bg-foreground text-background hover:bg-foreground/90"
+                    : "bg-background hover:bg-muted",
                   "focus-visible:ring-2 focus-visible:ring-[var(--border)]",
                 ].join(" ")}
                 title={it.label}>
@@ -125,7 +125,7 @@ export default function Sidebar({
         {/* Help Button */}
         <button
           aria-label="Help"
-          className="mb-2 grid h-11 w-11 place-items-center rounded-xl bg-background dark:bg-background-dark text-[var(--muted-text)] shadow transition-colors bg-muted-hover outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]"
+          className="mb-2 grid h-11 w-11 place-items-center rounded-xl bg-background dark:bg-background-dark text-[var(--muted-text)] shadow transition-colors hover:bg-muted outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]"
           title="Help">
           <Help />
         </button>

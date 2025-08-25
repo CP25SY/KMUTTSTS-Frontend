@@ -1,5 +1,5 @@
 "use client";
-import ThemeToggle from "@/components/ui/ThemeToggle";
+import { ModeToggle } from "@/components/ui/ThemeToggle";
 
 export interface SearchBarConfig {
   showProfile?: boolean;
@@ -21,16 +21,16 @@ export default function SearchBar({ config }: SearchBarProps) {
   // Use theme context for dynamic styling
   // ...existing code...
   return (
-    <div className="flex flex-1 items-center justify-center  ml-[100px] text-theme">
+    <div className="flex flex-1 items-center justify-center">
       <div className="flex items-center justify-between px-8 py-4 w-full max-w-2xl">
         {/* Search Input */}
         <div className="flex items-center gap-4 flex-1 max-w-xl">
           <input
             type="text"
             placeholder={placeholder}
-            className="rounded-full px-6 py-2 w-full bg-theme text-theme border border-none focus:outline-none focus:ring-2 focus:ring-primary"
+            className="rounded-full px-6 py-2 w-full border border-none focus:outline-none focus:ring-2 focus:ring-primary bg-background text-foreground"
           />
-          <button className="rounded-full bg-theme text-theme p-2 border border-none bg-muted-hover">
+          <button className="rounded-full p-2 border border-none hover:bg-muted bg-background text-foreground">
             {/* Search Icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -60,7 +60,7 @@ export default function SearchBar({ config }: SearchBarProps) {
           )}
         </div>
       </div>
-      <ThemeToggle />
+      <ModeToggle />
     </div>
   );
 }

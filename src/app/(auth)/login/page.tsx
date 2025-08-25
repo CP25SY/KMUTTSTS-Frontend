@@ -3,15 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import ThemeToggle from "@/components/ui/ThemeToggle";
+import { ModeToggle } from "@/components/ui/ThemeToggle";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <main className="min-h-screen flex">
-      <ThemeToggle />
-
       <div className="hidden lg:flex flex-1 relative">
         <Image
           src="/login.png"
@@ -21,7 +19,9 @@ export default function LoginPage() {
           priority
         />
       </div>
-
+      <div className="p-4 absolute top-0 right-0">
+        <ModeToggle />
+      </div>
       <div className="flex flex-1 justify-center items-center p-6">
         <div className="w-full max-w-md space-y-6">
           <h1 className="text-2xl font-bold text-center">Sign in to Salesai</h1>
@@ -61,7 +61,8 @@ export default function LoginPage() {
                 type="button"
                 aria-label={showPassword ? "Hide password" : "Show password"}
                 className="absolute inset-y-0 right-3 flex items-center text-[var(--foreground)]/60"
-                onClick={() => setShowPassword((v) => !v)}>
+                onClick={() => setShowPassword((v) => !v)}
+              >
                 {showPassword ? "🙈" : "👁️"}
               </button>
             </div>
@@ -74,7 +75,8 @@ export default function LoginPage() {
               <Link
                 href="#"
                 className="hover:underline"
-                style={{ color: "var(--primary)" }}>
+                style={{ color: "var(--primary)" }}
+              >
                 Forgot Password?
               </Link>
             </div>
@@ -82,7 +84,8 @@ export default function LoginPage() {
             <div>
               <button
                 type="submit"
-                className="btn-primary w-full font-semibold py-3 rounded-lg">
+                className="btn-primary w-full font-semibold py-3 rounded-lg"
+              >
                 Sign in
               </button>
             </div>
@@ -103,7 +106,8 @@ export default function LoginPage() {
               className="flex-1 flex items-center justify-center gap-3 rounded-lg py-3 px-4 transition-colors duration-200
                          border border-[var(--border)]
                          bg-[var(--muted)] text-[var(--muted-text)]
-                         hover:bg-[var(--primary)] hover:text-[var(--primary-text)]">
+                         hover:bg-[var(--primary)] hover:text-[var(--primary-text)]"
+            >
               <Image
                 src="/microsoft_logo.png"
                 alt="Microsoft"
@@ -120,7 +124,8 @@ export default function LoginPage() {
             <Link
               href="#"
               className="hover:underline"
-              style={{ color: "var(--primary)" }}>
+              style={{ color: "var(--primary)" }}
+            >
               Sign Up now
             </Link>
           </p>
