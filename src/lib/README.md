@@ -1,6 +1,6 @@
 # lib
 
-This folder contains utility libraries, API clients, and helper functions that support your application's business logic.
+This folder contains utility libraries, API clients, and helper functions that support your application's business logic. .
 
 ## Example
 
