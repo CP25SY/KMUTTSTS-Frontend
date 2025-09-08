@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { MoreHorizontal } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 interface Category {
   id: string;
@@ -12,25 +12,75 @@ interface Category {
 }
 
 const categories: Category[] = [
-  { id: "games", name: "Games", isActive: true },
-  { id: "movies", name: "Movies" },
+  { id: "learning", name: "Learning Activities", isActive: true },
+  { id: "events", name: "University Events" },
+  { id: "research", name: "Research & Projects" },
 ];
 
-const gameCategories = [
-  "Valorant",
-  "Minecraft", 
-  "PUBG",
-  "Mobile Legend",
-  "Free Fire",
-  "Assasin Creed",
-  "Battlegrounds",
-  "Fortnite",
-  "Brawl Stars"
+const learningCategories = [
+  "Computer Science",
+  "Engineering", 
+  "Mathematics",
+  "Physics",
+  "Chemistry",
+  "Biology",
+  "Language Studies",
+  "Business",
+  "Data Science"
+];
+
+const eventCategories = [
+  "Workshops",
+  "Seminars",
+  "Career Fair",
+  "Sports Day",
+  "Cultural Events",
+  "Graduation",
+  "Orientation",
+  "Guest Lectures"
+];
+
+const researchCategories = [
+  "Final Year Project",
+  "Research Presentation",
+  "Thesis Defense",
+  "Lab Sessions",
+  "Group Projects",
+  "Innovation Fair",
+  "Academic Conference"
 ];
 
 export default function CategoryTabs() {
-  const [activeCategory, setActiveCategory] = useState("games");
-  const [activeGame, setActiveGame] = useState("Valorant");
+  const [activeCategory, setActiveCategory] = useState("learning");
+  const [activeSubcategory, setActiveSubcategory] = useState("Computer Science");
+
+  // Get the appropriate subcategories based on active category
+  const getSubcategories = useCallback(() => {
+    switch (activeCategory) {
+      case "learning":
+        return learningCategories;
+      case "events":
+        return eventCategories;
+      case "research":
+        return researchCategories;
+      default:
+        return learningCategories;
+    }
+  }, [activeCategory]);
+
+  const subcategories = getSubcategories();
+
+  // Update subcategory when main category changes
+  useEffect(() => {
+    const newSubcategories = getSubcategories();
+    if (newSubcategories.length > 0) {
+      setActiveSubcategory(newSubcategories[0]);
+    }
+  }, [activeCategory, getSubcategories]);
+
+  const handleCategoryChange = (categoryId: string) => {
+    setActiveCategory(categoryId);
+  };
 
   return (
     <div className="space-y-4">
@@ -49,7 +99,7 @@ export default function CategoryTabs() {
                   ? "bg-primary text-background hover:bg-primary/85"
                   : "bg-muted text-muted-foreground hover:bg-muted/80"
               )}
-              onClick={() => setActiveCategory(category.id)}
+              onClick={() => handleCategoryChange(category.id)}
             >
               {category.name}
             </Button>
@@ -66,27 +116,25 @@ export default function CategoryTabs() {
         </Button>
       </div>
 
-      {/* Game Categories */}
-      {activeCategory === "games" && (
-        <div className="flex flex-wrap gap-2">
-          {gameCategories.map((game) => (
-            <Button
-              key={game}
-              variant={activeGame === game ? "default" : "outline"}
-              size="sm"
-              className={cn(
-                "rounded-full px-4 py-2 text-sm transition-colors",
-                activeGame === game
-                  ? "bg-black text-white hover:bg-black/90"
-                  : "border-border bg-background text-foreground hover:bg-muted"
-              )}
-              onClick={() => setActiveGame(game)}
-            >
-              {game}
-            </Button>
-          ))}
-        </div>
-      )}
+      {/* Subcategories */}
+      <div className="flex flex-wrap gap-2">
+        {subcategories.map((subcategory) => (
+          <Button
+            key={subcategory}
+            variant={activeSubcategory === subcategory ? "default" : "outline"}
+            size="sm"
+            className={cn(
+              "rounded-full px-4 py-2 text-sm transition-colors",
+              activeSubcategory === subcategory
+                ? "bg-black text-white hover:bg-black/90"
+                : "border-border bg-background text-foreground hover:bg-muted"
+            )}
+            onClick={() => setActiveSubcategory(subcategory)}
+          >
+            {subcategory}
+          </Button>
+        ))}
+      </div>
     </div>
   );
 }

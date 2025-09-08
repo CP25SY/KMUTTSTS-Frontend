@@ -2,6 +2,14 @@
 
 import Link from "next/link";
 import React from "react";
+import { 
+  Home, 
+  TrendingUp, 
+  Clock, 
+  Download, 
+  Settings, 
+  HelpCircle 
+} from "lucide-react";
 
 type Item = {
   icon: React.ReactNode;
@@ -16,62 +24,12 @@ type SidebarProps = {
   items?: Item[];
 };
 
-function Svg(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width="20"
-      height="20"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      {...props}
-    />
-  );
-}
-const Emoji = () => (
-  <Svg>
-    <circle cx="12" cy="12" r="8" />
-    <path d="M9 10h.01M15 10h.01M8.5 14c1 1 2.5 1.5 3.5 1.5s2.5-.5 3.5-1.5" />
-  </Svg>
-);
-const Flame = () => (
-  <Svg>
-    <path d="M8 14c0-3 3-5 2-8 4 2 6 5 6 8a4 4 0 1 1-8 0Z" />
-  </Svg>
-);
-const Clock = () => (
-  <Svg>
-    <circle cx="12" cy="12" r="9" />
-    <path d="M12 7v5l3 2" />
-  </Svg>
-);
-const Download = () => (
-  <Svg>
-    <path d="M12 3v10m0 0 3-3m-3 3-3-3" />
-    <path d="M5 17h14v3H5z" />
-  </Svg>
-);
-const Settings = () => (
-  <Svg>
-    <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 .6 1.65 1.65 0 0 1-2.06 0 1.65 1.65 0 0 0-1-.6 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 1 0-2 1.65 1.65 0 0 0-.6-1 1.65 1.65 0 0 1 0-2.06 1.65 1.65 0 0 0 .6-1A1.65 1.65 0 0 0 4.6 4.6l-.06-.06A2 2 0 1 1 7.37 1.7l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 2-.6 1.65 1.65 0 0 1 2.06 0 1.65 1.65 0 0 0 1 .6 1.65 1.65 0 0 0 1.82-.33l.06-.06A2 2 0 1 1 20.3 7.37l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 .6 1 1.65 1.65 0 0 1 0 2Z" />
-  </Svg>
-);
-const Help = () => (
-  <Svg>
-    <circle cx="12" cy="12" r="9" />
-    <path d="M9.09 9a3 3 0 1 1 5.83 1c0 2-3 2-3 4" />
-    <path d="M12 17h.01" />
-  </Svg>
-);
-
 const DEFAULT_ITEMS: Item[] = [
-  { icon: <Emoji />, href: "#", label: "Home", active: true },
-  { icon: <Flame />, href: "#", label: "Trending" },
-  { icon: <Clock />, href: "#", label: "History" },
-  { icon: <Download />, href: "#", label: "Downloads" },
-  { icon: <Settings />, href: "#", label: "Settings" },
+  { icon: <Home size={20} />, href: "#", label: "Home", active: true },
+  { icon: <TrendingUp size={20} />, href: "#", label: "Trending" },
+  { icon: <Clock size={20} />, href: "#", label: "History" },
+  { icon: <Download size={20} />, href: "#", label: "Downloads" },
+  { icon: <Settings size={20} />, href: "#", label: "Settings" },
 ];
 
 export default function Sidebar({
@@ -127,7 +85,7 @@ export default function Sidebar({
           aria-label="Help"
           className="mb-2 grid h-11 w-11 place-items-center rounded-xl bg-background shadow transition-colors hover:bg-muted outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]"
           title="Help">
-          <Help />
+          <HelpCircle size={20} />
         </button>
       </div>
     </aside>
