@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import HlsVideoPlayer, {
   HlsVideoPlayerHandle,
   type CaptionTrack,
-} from "@/components/HlsVideoPlayer";
+} from "@/components/features/video_player/HlsVideoPlayer";
 import { Button } from "@/components/ui/button";
 import Sidebar from "@/components/shared/Sidebar";
 
