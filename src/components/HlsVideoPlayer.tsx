@@ -123,6 +123,10 @@ const HlsVideoPlayer = forwardRef<HlsVideoPlayerHandle, HlsVideoPlayerProps>(
     const videoRef = useRef<HTMLVideoElement>(null);
     const hlsRef = useRef<Hls | null>(null);
     const statsIntervalRef = useRef<NodeJS.Timeout | null>(null);
+    const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const isClickHandledRef = useRef(false);
+    const keyboardTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const isKeyboardHandledRef = useRef(false);
 
     // State
     const [isPlaying, setIsPlaying] = useState(false);
@@ -136,6 +140,7 @@ const HlsVideoPlayer = forwardRef<HlsVideoPlayerHandle, HlsVideoPlayerProps>(
     const [currentQuality, setCurrentQuality] = useState<number>(-1);
     const [isNativeHls, setIsNativeHls] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [bufferedTime, setBufferedTime] = useState(0);
 
     // Check for native HLS support
     const checkNativeHlsSupport = useCallback(() => {
@@ -349,7 +354,13 @@ const HlsVideoPlayer = forwardRef<HlsVideoPlayerHandle, HlsVideoPlayerProps>(
         setIsPlaying(false);
         onEnded?.();
       };
-      const handleTimeUpdate = () => setCurrentTime(video.currentTime);
+      const handleTimeUpdate = () => {
+        setCurrentTime(video.currentTime);
+        // Update buffered time for progress bar
+        if (video.buffered.length > 0) {
+          setBufferedTime(video.buffered.end(video.buffered.length - 1));
+        }
+      };
       const handleDurationChange = () => setDuration(video.duration);
       const handleVolumeChange = () => {
         setVolume(video.volume);
@@ -426,6 +437,67 @@ const HlsVideoPlayer = forwardRef<HlsVideoPlayerHandle, HlsVideoPlayerProps>(
       video.currentTime = Math.max(0, Math.min(video.duration, video.currentTime + seconds));
     }, []);
 
+    const adjustVolume = useCallback((delta: number) => {
+      const video = videoRef.current;
+      if (!video) return;
+      const newVolume = Math.max(0, Math.min(1, video.volume + delta));
+      video.volume = newVolume;
+      video.muted = newVolume === 0;
+    }, []);
+
+    const handleVideoClick = useCallback((e: React.MouseEvent) => {
+      // Prevent triggering play/pause when clicking on controls
+      if ((e.target as HTMLElement).closest('.video-controls')) {
+        return;
+      }
+
+      // Simple debounce for rapid clicks
+      if (isClickHandledRef.current) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+
+      // Set flag to prevent rapid clicks
+      isClickHandledRef.current = true;
+      
+      // Clear any existing timeout
+      if (clickTimeoutRef.current) {
+        clearTimeout(clickTimeoutRef.current);
+      }
+
+      // Execute the toggle immediately
+      togglePlayPause();
+
+      // Reset the flag after a short delay
+      clickTimeoutRef.current = setTimeout(() => {
+        isClickHandledRef.current = false;
+      }, 200);
+    }, [togglePlayPause]);
+
+    const handleKeyboardToggle = useCallback(() => {
+      // Simple debounce for rapid keyboard presses
+      if (isKeyboardHandledRef.current) {
+        return;
+      }
+
+      // Set flag to prevent rapid key presses
+      isKeyboardHandledRef.current = true;
+      
+      // Clear any existing timeout
+      if (keyboardTimeoutRef.current) {
+        clearTimeout(keyboardTimeoutRef.current);
+      }
+
+      // Execute the toggle immediately
+      togglePlayPause();
+
+      // Reset the flag after a short delay
+      keyboardTimeoutRef.current = setTimeout(() => {
+        isKeyboardHandledRef.current = false;
+      }, 200);
+    }, [togglePlayPause]);
+
     // Keyboard shortcuts
     useEffect(() => {
       const handleKeyDown = (e: KeyboardEvent) => {
@@ -434,11 +506,17 @@ const HlsVideoPlayer = forwardRef<HlsVideoPlayerHandle, HlsVideoPlayerProps>(
         const target = e.target as HTMLElement;
         if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') return;
 
+        // Prevent double triggering if the video element is focused
+        if (target === videoRef.current) {
+          videoRef.current.blur();
+          return;
+        }
+
         switch (e.code) {
           case 'Space':
           case 'KeyK':
             e.preventDefault();
-            togglePlayPause();
+            handleKeyboardToggle();
             break;
           case 'KeyM':
             e.preventDefault();
@@ -456,12 +534,20 @@ const HlsVideoPlayer = forwardRef<HlsVideoPlayerHandle, HlsVideoPlayerProps>(
             e.preventDefault();
             seekRelative(5);
             break;
+          case 'ArrowUp':
+            e.preventDefault();
+            adjustVolume(0.1); // Increase volume by 10%
+            break;
+          case 'ArrowDown':
+            e.preventDefault();
+            adjustVolume(-0.1); // Decrease volume by 10%
+            break;
         }
       };
 
       document.addEventListener('keydown', handleKeyDown);
       return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [togglePlayPause, toggleMute, toggleFullscreen, seekRelative]);
+    }, [handleKeyboardToggle, toggleMute, toggleFullscreen, seekRelative, adjustVolume]);
 
     const handleSeek = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
       const video = videoRef.current;
@@ -530,6 +616,12 @@ const HlsVideoPlayer = forwardRef<HlsVideoPlayerHandle, HlsVideoPlayerProps>(
         if (statsIntervalRef.current) {
           clearInterval(statsIntervalRef.current);
         }
+        if (clickTimeoutRef.current) {
+          clearTimeout(clickTimeoutRef.current);
+        }
+        if (keyboardTimeoutRef.current) {
+          clearTimeout(keyboardTimeoutRef.current);
+        }
       };
     }, []);
 
@@ -553,6 +645,13 @@ const HlsVideoPlayer = forwardRef<HlsVideoPlayerHandle, HlsVideoPlayerProps>(
           playsInline={playsInline}
           preload={preload}
           controls={false}
+          tabIndex={-1}
+          onFocus={(e) => e.target.blur()}
+          onKeyDown={(e) => {
+            // Prevent video element from handling keyboard events
+            e.preventDefault();
+            e.stopPropagation();
+          }}
         >
           {captions.map((caption) => (
             <track
@@ -566,27 +665,54 @@ const HlsVideoPlayer = forwardRef<HlsVideoPlayerHandle, HlsVideoPlayerProps>(
           ))}
         </video>
 
+        {/* Click overlay for play/pause */}
+        <div 
+          className="absolute inset-0 cursor-pointer"
+          onClick={handleVideoClick}
+          tabIndex={-1}
+          onFocus={(e) => e.target.blur()}
+          style={{ zIndex: 1 }}
+        />
+
         {/* Loading overlay */}
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50" style={{ zIndex: 2 }}>
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white" />
           </div>
         )}
 
         {/* Controls */}
         <div className={cn(
-          'absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity',
+          'absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity video-controls',
           controlsClassName
-        )}>
+        )} style={{ zIndex: 3 }}>
           {/* Progress bar */}
-          <div className="mb-3">
+          <div className="mb-3 relative">
+            {/* Background track */}
+            <div className="w-full h-1 bg-white/20 rounded-lg relative overflow-hidden">
+              {/* Buffered progress */}
+              <div
+                className="absolute top-0 left-0 h-full bg-muted-foreground/40 rounded-lg transition-all duration-300"
+                style={{
+                  width: duration > 0 ? `${(bufferedTime / duration) * 100}%` : '0%'
+                }}
+              />
+              {/* Current progress */}
+              <div
+                className="absolute top-0 left-0 h-full bg-primary rounded-lg transition-all duration-150"
+                style={{
+                  width: duration > 0 ? `${(currentTime / duration) * 100}%` : '0%'
+                }}
+              />
+            </div>
+            {/* Invisible input for seeking */}
             <input
               type="range"
               min="0"
               max={duration}
               value={currentTime}
               onChange={handleSeek}
-              className="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:cursor-pointer"
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               aria-label="Seek video"
             />
           </div>

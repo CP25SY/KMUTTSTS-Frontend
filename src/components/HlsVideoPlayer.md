@@ -195,6 +195,14 @@ const getAvailableQualities = () => playerRef.current?.getLevels();
 | `F` | Toggle Fullscreen |
 | `←` | Seek backward 5s |
 | `→` | Seek forward 5s |
+| `↑` | Increase volume 10% |
+| `↓` | Decrease volume 10% |
+
+## Video Interaction
+
+- **Click on video**: Play/Pause toggle (doesn't affect seek position)
+- **Click on controls**: Normal control behavior
+- **Progress bar**: Visual representation with primary color for progress and muted color for buffering
 
 ## Browser Support
 

@@ -97,7 +97,7 @@ export default function PlayerPage() {
                 muted={false}
                 initialQuality="auto"
                 capLevelToPlayerSize={true}
-                className="rounded-2xl shadow-lg overflow-hidden bg-black"
+                className="rounded-md shadow-lg overflow-hidden bg-black"
                 videoClassName="w-full aspect-video"
                 controlsClassName="p-4"
                 onQualityChanged={handleQualityChanged}
@@ -194,7 +194,8 @@ export default function PlayerPage() {
                   Keyboard shortcuts: Space/K (play/pause), M (mute), F
                   (fullscreen)
                 </div>
-                <div>Arrow keys: seek ±5s</div>
+                <div>Arrow keys: ←→ (seek ±5s), ↑↓ (volume ±10%)</div>
+                <div>Click video to play/pause</div>
               </div>
             </div>
           </div>
